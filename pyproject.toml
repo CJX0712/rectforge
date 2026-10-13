@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rectforge"
+version = "0.1.0"
+description = "RectForge - world-class flow matching / rectified flow / stochastic interpolant generative modeling system (pure NumPy, deterministic, CPU-only). Author: Chenxing"
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Chenxing" }]
+dependencies = ["numpy>=2.0", "scipy>=1.11"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-cov>=5", "ruff>=0.16"]
+
+[project.scripts]
+rectforge = "rectforge.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["rectforge*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q -W ignore::UserWarning"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF", "C4", "PLC", "PLE", "PLR", "PLW"]
+ignore = [
+    "RUF001",  # ambiguous unicode char in docstring/comment: Chinese punctuation is intentional
+    "RUF002",
+    "RUF003",
+    "PLC0415",  # function-level import: deliberate lazy imports for optional backends
+    "PLR0917",  # too many positional args: mine() protocol is intentionally 5-arg
+    "PLR0913",  # too many arguments: config-driven constructors
+    "PLR2004",  # magic value comparison: numeric thresholds are the domain language
+    "E731",     # lambda assignment: used for compact functional configs
+    "PLW0108",  # zero-arg lambda: density factory table intentionally defers construction
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["PLC0415"]

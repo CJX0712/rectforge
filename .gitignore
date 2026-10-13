@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+examples/benchmark.json
+ablation_full.json
+benchmark_full.json
+*.out
+*.txt
+!requirements*.txt
+.DS_Store

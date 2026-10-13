@@ -1,0 +1,33 @@
+# GitHub Actions CI: ruff + pytest + demo 门禁
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest ruff
+      - name: Lint
+        run: ruff check rectforge tests examples
+      - name: Tests
+        run: python -m pytest tests/ -q
+      - name: Selftest (G1 invariants)
+        run: python -m rectforge.cli selftest
+      - name: Demo (all gates, fast config)
+        run: python examples/run_demo.py --fast
